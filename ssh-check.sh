@@ -24,29 +24,29 @@ do
   mkdir -p /tmp/tcpdump/$name
   scp root@$ip:/root/bigdata/tcpdump/* /tmp/tcpdump/$name
 
-  cd /tmp/tcpdump/$name
+  #cd /tmp/tcpdump/$name
   #for a in $(ls --sort time | tail -n+2)
-  for a in $(ls --sort time)
+  for a in $(ls /tmp/tcpdump/$name --sort time)
   do
-      #echo $a | cut -d "." -f1 | cut -d "-" -f2
-      year=$(echo $a | cut -d "." -f1 | cut -d "-" -f2)
-      mon=$(echo $a | cut -d "." -f1 | cut -d "-" -f3)
-      day=$(echo $a | cut -d "." -f1 | cut -d "-" -f4)
-      time=$(echo $a | cut -d "." -f1 | cut -d "-" -f5):00
+      #echo /tmp/tcpdump/$name/$a | cut -d "." -f1 | cut -d "-" -f2
+      year=$(echo /tmp/tcpdump/$name/$a | cut -d "." -f1 | cut -d "-" -f3)
+      mon=$(echo /tmp/tcpdump/$name/$a | cut -d "." -f1 | cut -d "-" -f4)
+      day=$(echo /tmp/tcpdump/$name/$a | cut -d "." -f1 | cut -d "-" -f5)
+      time=$(echo /tmp/tcpdump/$name/$a | cut -d "." -f1 | cut -d "-" -f6):00
       #echo $year $mon $day $time
-      filedate1=$(date "+%s" -d "$mon/$day/$year $time")000
-      filedate=$(echo $filedate1 + 8*3600*1000 | bc)
+      filedate=$(date "+%s" -d "$mon/$day/$year $time")000
+      #filedate=$(echo $filedate1 + 8*3600*1000 | bc)
       echo $filedate
       k=0
-      #checkline=$(tcpdump -nnnnr $a | cut -d ">" -f1 | grep -v "172.24.128.246" | cut -d " " -f3 | sort | head -n 1)
-      checkline=$(tcpdump -nnnnr $a | cut -d ">" -f1 | cut -d " " -f3 | sort | head -n 1)
+      #checkline=$(tcpdump -nnnnr /tmp/tcpdump/$name/$a | cut -d ">" -f1 | grep -v "172.24.128.246" | cut -d " " -f3 | sort | head -n 1)
+      checkline=$(tcpdump -nnnnr /tmp/tcpdump/$name/$a | cut -d ">" -f1 | cut -d " " -f3 | sort | head -n 1)
       check1=$(echo $checkline | cut -d "." -f1)
       check2=$(echo $checkline | cut -d "." -f2)
       check3=$(echo $checkline | cut -d "." -f3)
       check4=$(echo $checkline | cut -d "." -f4)
       check="$check1.$check2.$check3.$check4"
-      #for b in $(tcpdump -nnnnr $a | cut -d ">" -f1 | grep -v "172.24.128.246" | cut -d " " -f3 | sort)
-      for b in $(tcpdump -nnnnr $a | cut -d ">" -f1 | cut -d " " -f3 | sort)
+      #for b in $(tcpdump -nnnnr /tmp/tcpdump/$name/$a | cut -d ">" -f1 | grep -v "172.24.128.246" | cut -d " " -f3 | sort)
+      for b in $(tcpdump -nnnnr /tmp/tcpdump/$name/$a | cut -d ">" -f1 | cut -d " " -f3 | sort)
       do
           #echo $b
           b1=$(echo $b | cut -d "." -f1)
